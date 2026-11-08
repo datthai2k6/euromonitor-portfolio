@@ -363,6 +363,34 @@
     .pre{font-size:13px}
     .hero p.body{font-size:17px}
   }
+  /* ===== LIQUID GLASS: floating top bar only ===== */
+  [id]{scroll-margin-top:110px}
+  .site-header{
+    left:50%;right:auto;top:14px;width:min(1240px,calc(100% - 32px));transform:translateX(-50%);
+    border-radius:100px;isolation:isolate;
+    background:rgba(255,255,255,.45);
+    -webkit-backdrop-filter:blur(20px) saturate(180%);backdrop-filter:blur(20px) saturate(180%);
+    border:1px solid rgba(255,255,255,.75);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.9),inset 0 -1px 1px rgba(255,255,255,.35),inset 0 0 12px rgba(255,255,255,.25),0 14px 34px -16px rgba(27,27,27,.35);
+  }
+  .site-header.scrolled{box-shadow:inset 0 1px 0 rgba(255,255,255,.9),inset 0 -1px 1px rgba(255,255,255,.35),inset 0 0 12px rgba(255,255,255,.25),0 18px 40px -20px rgba(27,27,27,.45)}
+  .site-header .wrap{height:64px;max-width:none;padding:0 10px 0 28px}
+  .site-header::before{
+    content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:-1;
+    background:
+      radial-gradient(160px circle at var(--mx,25%) var(--my,0%),rgba(255,255,255,.55),transparent 65%),
+      linear-gradient(180deg,rgba(255,255,255,.35),rgba(255,255,255,0) 55%);
+  }
+  .hero-art{top:0;height:calc(78% + 76px)}
+  @media (max-width:960px){
+    .site-header{top:10px;width:calc(100% - 20px)}
+    .site-header .wrap{padding:0 8px 0 20px}
+    .links{top:calc(100% + 10px);border-radius:24px;background:rgba(255,255,255,.94);border:1px solid rgba(255,255,255,.75);box-shadow:0 20px 30px -20px rgba(27,27,27,.4)}
+    .hero-art{top:0}
+  }
+  @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+    .site-header{background:rgba(255,255,255,.95)}
+  }
 </style>
 </head>
 <body>
@@ -718,8 +746,8 @@
     </div>
     <div class="edu-grid stagger">
       <div class="card rv">
-        <div class="when">2024 – Present</div>
         <div class="edu-logo"><img src="ueh-isb-logo.png" alt="UEH.ISB Honours College" onerror="this.parentNode.remove()"></div>
+        <div class="when">2024 – Present</div>
         <h4>UEH.ISB Honours College</h4>
         <ul>
           <li>Final Year Marketing Student</li>
@@ -742,8 +770,8 @@
         </div>
       </div>
       <div class="card rv">
-        <div class="when">2021 – 2024</div>
         <div class="edu-logo"><img src="ctu-logo.png" alt="Can Tho University" onerror="this.parentNode.remove()"></div>
+        <div class="when">2021 – 2024</div>
         <h4>Can Tho University Elite High School</h4>
         <ul>
           <li>High School Diploma</li>
@@ -1130,6 +1158,17 @@ const vObs = new IntersectionObserver(entries => {
 }, { threshold: 0.5 });
 document.querySelectorAll('iframe[data-src]').forEach(f => vObs.observe(f));
 
+/* ---------- LIQUID GLASS: sheen follows the pointer ---------- */
+if (matchMedia('(hover: hover)').matches && !reduce) {
+  const LG = '.site-header,.btn,.pill,.burger,.tabs button,.float-cta,.contact .lines > div,.stat';
+  addEventListener('pointermove', e => {
+    const el = e.target.closest && e.target.closest(LG);
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    el.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+    el.style.setProperty('--my', (e.clientY - r.top) + 'px');
+  }, { passive: true });
+}
 </script>
 </body>
 </html>
